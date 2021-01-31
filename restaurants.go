@@ -49,7 +49,7 @@ func Restaurants(w http.ResponseWriter, r *http.Request) {
 }
 
 func recommendation(lat float64, long float64) ([]restaurant, error) {
-	client, err := maps.NewClient(maps.WithAPIKey("AIzaSyCrV3oxI6JEXV797k61ujfif0_tjG9Xckc"))
+	client, err := maps.NewClient(maps.WithAPIKey("")) // todo this was removed
 	if err != nil {
 		return nil, errors.New("invalid Google API key")
 	}
