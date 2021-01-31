@@ -7,12 +7,12 @@ import (
 	"fmt"
 	"html"
 	"net/http"
-	"time"
 )
 
-func Login(w http.ResponseWriter, r *http.Request) {
+func CreateGroup(w http.ResponseWriter, r *http.Request) {
 	var u struct {
-		Username string  `json:"username"`
+		Username       string `json:"user"`
+		UsernameFriend string `json:"friend"`
 	}
 
 	if err := json.NewDecoder(r.Body).Decode(&u); err != nil {
@@ -27,8 +27,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 	defer client.Close()
 
-	users := client.Collection("users")
-	users.Doc(u.Username).Create(ctx, map[string]string{"created": time.Now().String()})
+	groups := client.Collection("groups")
+	groups.Doc(u.Username).Create(ctx, struct {
+		Members []string
+		Rests []string
+	}{
+		Members: []string{u.Username, u.UsernameFriend},
+		Rests: []string{},
+	})
 
 	fmt.Fprint(w, html.EscapeString(u.Username))
 }
