@@ -36,5 +36,7 @@ func Yay(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(&b, m["Rests"])
 	line, _ := b.ReadString(0)
 	match := strings.Contains(line, u.Restaurant)
-	fmt.Fprint(w, match)
+	ret := map[string]bool{"match":match}
+	js,_:=json.Marshal(ret)
+	w.Write(js)
 }
